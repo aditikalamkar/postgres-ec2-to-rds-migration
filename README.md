@@ -81,6 +81,12 @@ Multi-AZ keeps a standby in another Availability Zone and fails over automatical
 - **Superuser-only extensions.** RDS doesn't give you a true superuser, so every extension has to be on the RDS supported list. Check this before you promise a date.
 - **Connection limits.** Six services, each with a default pool of 10, against a small instance adds up fast. Pool sizes were set deliberately.
 
+## Field notes
+
+- [Troubleshooting](field-notes/TROUBLESHOOTING.md): connection timeouts, SSL errors, broken dumps, version mismatches, Flyway failures, sequences, pool limits, timezone shifts
+- [Precautions](field-notes/PRECAUTIONS.md): how I keep a production migration safe at every stage
+- [Interview questions](field-notes/INTERVIEW-QUESTIONS.md): senior-level questions on this migration, with answers
+
 ## Repository layout
 
 ```
@@ -89,6 +95,10 @@ Multi-AZ keeps a standby in another Availability Zone and fails over automatical
 ├── assets/                     diagrams and animated flow
 ├── config/
 │   └── application-rds.yml.example
+├── field-notes/
+│   ├── TROUBLESHOOTING.md      errors, causes and fixes
+│   ├── PRECAUTIONS.md          how production stays safe
+│   └── INTERVIEW-QUESTIONS.md  senior-level Q&A
 ├── docs/
 │   ├── RUNBOOK.md              step-by-step with approval gates
 │   ├── ROLLBACK.md             how to go back, and when
