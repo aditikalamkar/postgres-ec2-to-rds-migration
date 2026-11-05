@@ -35,6 +35,16 @@ Every step in the [runbook](docs/RUNBOOK.md) has an approval gate because of rul
 
 ![Architecture before and after](assets/architecture.svg)
 
+## AWS architecture
+
+![AWS architecture after migration](assets/aws-architecture.svg)
+
+- **Network:** the app runs on EC2 in a public subnet behind the internet gateway. RDS sits in private subnets with no public IP and no route from the internet.
+- **Access:** the RDS security group allows port 5432 only from the app's security group. No IP ranges are opened.
+- **Data protection:** encryption at rest, TLS enforced, deletion protection, daily automated backups with point-in-time recovery.
+- **Availability:** the DB subnet group already spans two Availability Zones, so turning on a Multi-AZ standby later is a setting change.
+- **Rollback:** the old PostgreSQL container stays stopped on the same EC2 host, with its volume intact, until the client signs off.
+
 ## How I did it
 
 **1. Took stock first.** PostgreSQL version in the container, database size, extensions in use, the Flyway history table, sequences, and which services connect with which user. This decided the RDS engine version (same major version, so no surprises) and the migration method.
@@ -76,7 +86,7 @@ Multi-AZ keeps a standby in another Availability Zone and fails over automatical
 ```
 .
 ├── README.md
-├── assets/                     diagram and animated flow
+├── assets/                     diagrams and animated flow
 ├── config/
 │   └── application-rds.yml.example
 ├── docs/
