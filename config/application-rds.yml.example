@@ -1,0 +1,23 @@
+# Spring Boot datasource for RDS. Every value comes from the environment,
+# so nothing secret lives in the repo or the Docker image.
+#
+#   DB_HOST=<rds-endpoint>  DB_PORT=5432  DB_NAME=shop
+#   DB_USER=shop_app        DB_PASSWORD=<from secret store>
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT:5432}/${DB_NAME}?sslmode=require
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    hikari:
+      # Keep (services x maximum-pool-size) well under the instance's max_connections.
+      maximum-pool-size: ${DB_POOL_MAX:5}
+      minimum-idle: 1
+      connection-timeout: 10000
+      max-lifetime: 1500000      # under RDS/NLB idle timeouts
+  flyway:
+    enabled: true
+    validate-on-migrate: true
+    baseline-on-migrate: false   # schema already exists; history was migrated with it
+  jpa:
+    hibernate:
+      ddl-auto: validate         # never let Hibernate change the production schema
